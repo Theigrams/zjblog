@@ -21,10 +21,8 @@
         repo: 'zjblog',
         owner: 'Theigrams',
         admin: ['Theigrams'],
-        id: title, // 如果要每篇文章都使用独立评论 需要改为id: location.hash
-        // 或者id: md5(location.hash)注意md5包需要单独引入
+        id: title,
         distractionFreeMode: false // 无干扰模式
     })
-
     gitalk.render('gitalk-container')
 </script>

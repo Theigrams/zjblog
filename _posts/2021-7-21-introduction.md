@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "How do I build this blog?"
 date: 2021-07-21 12:00:00
-tags: blog html
+tags: blog
 ---
 
 > 本文主要介绍了这个博客的搭建过程。
@@ -232,7 +232,9 @@ Jekyll 不能在 `_posts` 里新建文件夹，这也意味着插入图片会变
 
 
 
+### 评论系统
 
+本来打算用**来必力**的，但注册了很久都没成功，不知道出了啥问题，只好用 [Gitalk](https://github.com/gitalk/gitalk)，安装过程可以参考 [Gitalk评论插件使用教程](https://segmentfault.com/a/1190000018072952)，但不知道为什么在评论框打字时非常卡顿，不过没关系，安慰自己反正也没人评论，这么一想又释然了。
 
 
 
