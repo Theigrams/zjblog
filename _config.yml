@@ -1,1 +1,25 @@
-theme: jekyll-theme-cayman
+title: Jin's Blog
+name: "Jin Zhang's Tech Blog"
+author: Jin Zhang
+email: theigrams@buaa.edu.cn
+baseurl: "/zjblog"
+description: Document my learning notes.
+url: "https://theigrams.github.io"
+github_username:  theigrams
+
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+excerpt_separator: <!--more-->
+plugins:
+  - jekyll-feed
+  - jekyll-archives
+exclude:
+  - Gemfile
+  - Gemfile.lock
+kramdown:
+  input: GFM
+  auto_ids: true
+  syntax_highlighter: rouge
+  toc_levels: 1..3
