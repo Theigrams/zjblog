@@ -1,4 +1,4 @@
-<div id="disqus_thread"></div>
+<!-- <div id="disqus_thread"></div>
 <script>
     (function() {  // DON'T EDIT BELOW THIS LINE
         var d = document, s = d.createElement('script');
@@ -10,4 +10,21 @@
 
 <noscript>
     Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
-</noscript>
+</noscript> -->
+
+<div id="gitalk-container"></div>
+<script>
+    var title = location.pathname.substr(0, 50);
+    var gitalk = new Gitalk({
+        clientID: 'c9fdca95c5313f96d008',
+        clientSecret: '1b231a749b4dbfe7aa8e4bc26063957eda6465d7',
+        repo: 'zjblog',
+        owner: 'Theigrams',
+        admin: ['Theigrams'],
+        id: title, // 如果要每篇文章都使用独立评论 需要改为id: location.hash
+        // 或者id: md5(location.hash)注意md5包需要单独引入
+        distractionFreeMode: false // 无干扰模式
+    })
+
+    gitalk.render('gitalk-container')
+</script>

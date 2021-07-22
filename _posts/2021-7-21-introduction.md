@@ -108,7 +108,7 @@ bundle exec jekyll serve
 
 这样 Jekyll 就在本地环境上跑起来了，接下来是进行一些个性化修改，修改过程比较繁琐，这里就略去不提，可以参考以下链接：
 
-[ jekyll markdown语法 - 搜索结果 - 知乎 (zhihu.com)](https://www.zhihu.com/search?type=content&q=jekyll markdown语法)
+[Github Pages + jekyll 全面介绍极简搭建个人网站和博客 - 知乎 (zhihu.com)](https://www.zhihu.com/search?type=content&q=jekyll markdown语法)
 
 [博客搭建(四) 使用Jekyll写博客 (watchzerg.github.io)](http://watchzerg.github.io/2015/03/20/jekyll-write-blog.html)
 
@@ -186,9 +186,9 @@ $$
 
 ### 插入图片
 
-Jekyll 不能在 `_posts` 里新建文件夹，这也意味着插入图片会变得比较困难，参考该链接下的回答：[Jekyll博客中如何用相对路径来加载图片？ - 知乎](https://www.zhihu.com/question/31123165)，最好的方式是使用图床，但考虑到图床的不稳定性，也挺麻烦。我采用的方式是先将在typora中设置将图片保存到 `../assets/images` 文件夹下，然后发布时统一将其替换成 `{{ '/assets/images/diffusion-beta.png' | relative_url }}`，使用正则表达式：
+Jekyll 不能在 `_posts` 里新建文件夹，这也意味着插入图片会变得比较困难，参考该链接下的回答：[Jekyll博客中如何用相对路径来加载图片？ - 知乎](https://www.zhihu.com/question/31123165)，最好的方式是使用图床，但由于配置较麻烦，我暂时采用的方式是先将在typora中设置将图片保存到 `../assets/images` 文件夹下，然后发布时统一将其替换成 `{{ '/assets/images/diffusion-beta.png' | relative_url }}`，使用正则表达式：
 
-```
+```bash
 \(\.\./assets/images/(.*)\)
 
 ({{ '/assets/images/$1' | relative_url }})
@@ -200,11 +200,41 @@ Jekyll 不能在 `_posts` 里新建文件夹，这也意味着插入图片会变
 
 使用如下代码：
 
-```
+```html
 {:class="table-of-content"}
 * TOC
 {:toc}
 ```
+
+### 数学公式
+默认的 `MathJax` 不支持以 `$` 作为定界符，参考 [TeX Input Processor Options — MathJax 3.2 documentation](http://docs.mathjax.org/en/latest/options/input/tex.html) 的设置，在 `head.html` 中加入如下代码即可：
+
+```html
+<script>
+    MathJax = {
+        tex: {
+            inlineMath: [
+                ['$', '$'],
+                ['\\(', '\\)']
+            ]
+        }
+    };
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+```
+
+
+
+### 语法高亮主题
+
+使用 `pygmentsTheme`，此处参考 [HardCandy-Jekyll](https://github.com/xukimseven/HardCandy-Jekyll) 主题配置。
+
+
+
+
+
+
 
 
 
