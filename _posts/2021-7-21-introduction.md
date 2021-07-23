@@ -70,7 +70,7 @@ brew install ruby
 
 安装完之后，会有如下提示，因为mac已经预装了2.6 版本的ruby。
 
-![image]({{ '/assets/images/image.png' | relative_url }})
+![image]({{ site.baseurl }}/assets/images/2021-7-21-introduction/image.png)
 
 因此，我们要将默认的ruby路径改为新版本的，在重启终端之后，可以看到ruby路径已改变。
 
@@ -79,7 +79,7 @@ echo 'export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/3.0.0/bin:$P
 ```
 
 
-![image1]({{ '/assets/images/image1.png' | relative_url }})
+![image1]({{ site.baseurl }}/assets/images/2021-7-21-introduction/image1.png)
 
 第二步，安装jekyll：
 
@@ -104,7 +104,7 @@ cd myblog
 bundle exec jekyll serve
 ```
 
-![image2]({{ '/assets/images/image2.png' | relative_url }})
+![image2]({{ site.baseurl }}/assets/images/2021-7-21-introduction/image2.png)
 
 这样 Jekyll 就在本地环境上跑起来了，接下来是进行一些个性化修改，修改过程比较繁琐，这里就略去不提，可以参考以下链接：
 
@@ -186,12 +186,14 @@ $$
 
 ### 插入图片
 
-Jekyll 不能在 `_posts` 里新建文件夹，这也意味着插入图片会变得比较困难，参考该链接下的回答：[Jekyll博客中如何用相对路径来加载图片？ - 知乎](https://www.zhihu.com/question/31123165)，最好的方式是使用图床，但由于配置较麻烦，我暂时采用的方式是先将在typora中设置将图片保存到 `../assets/images` 文件夹下，然后发布时统一将其替换成 `{{ '/assets/images/diffusion-beta.png' | relative_url }}`，使用正则表达式：
+Jekyll 不能在 `_posts` 里新建文件夹，这也意味着插入图片会变得比较困难，参考该链接下的回答：[Jekyll博客中如何用相对路径来加载图片？ - 知乎](https://www.zhihu.com/question/31123165)，最好的方式是使用图床，但由于配置较麻烦，我暂时采用的方式是先将在typora中设置将图片保存到 `../assets/images/${filename}` 文件夹下，然后发布时统一替换成相对站点的路径即可：
 
 ```bash
-\(\.\./assets/images/(.*)\)
+# 匹配字符串
+../assets/images
 
-({{ '/assets/images/$1' | relative_url }})
+# 替换字符串
+{{ site.baseurl }}/assets/images
 ```
 
 
@@ -207,7 +209,7 @@ Jekyll 不能在 `_posts` 里新建文件夹，这也意味着插入图片会变
 ```
 
 ### 数学公式
-默认的 `MathJax` 不支持以 `$` 作为定界符，参考 [TeX Input Processor Options — MathJax 3.2 documentation](http://docs.mathjax.org/en/latest/options/input/tex.html) 的设置，在 `head.html` 中加入如下代码即可：
+默认的 `MathJax` 不支持以 `$` 作为定界符，参考 [TeX Input Processor Options — MathJax 3.2 documentation](http://docs.mathjax.org/en/latest/options/input/tex.html) 的设置，在 `head.html` 中加入如下代码即可：
 
 ```html
 <script>
@@ -226,6 +228,16 @@ Jekyll 不能在 `_posts` 里新建文件夹，这也意味着插入图片会变
 
 
 
+另外我发现 MathJax3 不能选中公式中的字符了，看了很久官方文档都没看到在哪可以设置，最后还是从 [Mathjax in HTML: Cannot select equations - Stack Overflow](https://stackoverflow.com/questions/66931266/mathjax-in-html-cannot-select-equations) 中找到了答案，这个功能在 Version 3 版本中已经被废弃了：
+
+> You are correct that MathJax output can't be copied directly from the page in version 3. Version 3 uses CSS with `content` properties in order to insert the characters into the page, and `content` text is not selectable in the page.
+>
+> In general, copying MathJax output would only be reliable with the simplest of expressions (nothing involving super- or subscripts, fractions, roots, arrays, multi-character stretchy delimiters, accents, etc.), so this was never a supported feature for MathJax.
+>
+> On the other hand, it would be possible for MathJax to insert the characters directly rather than use `content` CSS, and an extension to implement that would be possible. [Example code for doing that](https://groups.google.com/g/mathjax-users/c/1BzTQFINbqY/m/xGYAlhDNAwAJ) is available in the MathJax User's Forum.
+
+
+
 ### 语法高亮主题
 
 使用 `pygmentsTheme`，此处参考 [HardCandy-Jekyll](https://github.com/xukimseven/HardCandy-Jekyll) 主题配置。
@@ -234,9 +246,4 @@ Jekyll 不能在 `_posts` 里新建文件夹，这也意味着插入图片会变
 
 ### 评论系统
 
-本来打算用**来必力**的，但注册了很久都没成功，不知道出了啥问题，只好用 [Gitalk](https://github.com/gitalk/gitalk)，安装过程可以参考 [Gitalk评论插件使用教程](https://segmentfault.com/a/1190000018072952)，但不知道为什么在评论框打字时非常卡顿，不过没关系，安慰自己反正也没人评论，这么一想又释然了。
-
-
-
-
-
+本来打算用**来必力**的，但注册了很久都没成功，不知道出了啥问题，只好用 [Gitalk](https://github.com/gitalk/gitalk)，安装过程可以参考 [Gitalk评论插件使用教程](https://segmentfault.com/a/1190000018072952)，虽然要 GitHub 账户才能评论，不过一想估计也没人评论，顿时就无所谓了。
