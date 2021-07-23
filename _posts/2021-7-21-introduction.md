@@ -79,7 +79,7 @@ echo 'export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/3.0.0/bin:$P
 ```
 
 
-![image1]({{ site.baseurl }}/assets/images/2021-7-21-introduction/image1.png)
+![image1]({{site.baseurl}}/assets/images/2021-7-21-introduction/image1.png)
 
 第二步，安装jekyll：
 
@@ -107,6 +107,8 @@ bundle exec jekyll serve
 ![image2]({{ site.baseurl }}/assets/images/2021-7-21-introduction/image2.png)
 
 这样 Jekyll 就在本地环境上跑起来了，接下来是进行一些个性化修改，修改过程比较繁琐，这里就略去不提，可以参考以下链接：
+
+[简介 – Liquid 模板语言中文文档 - Liquid 中文网 (bootcss.com)](https://liquid.bootcss.com/basics/introduction/)
 
 [Github Pages + jekyll 全面介绍极简搭建个人网站和博客 - 知乎 (zhihu.com)](https://www.zhihu.com/search?type=content&q=jekyll markdown语法)
 
@@ -192,8 +194,8 @@ Jekyll 不能在 `_posts` 里新建文件夹，这也意味着插入图片会变
 # 匹配字符串
 ../assets/images
 
-# 替换字符串
-{{ site.baseurl }}/assets/images
+# 替换字符串 
+{% raw %}{{ site.baseurl }}/assets/images{% endraw %}
 ```
 
 
