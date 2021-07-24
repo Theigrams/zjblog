@@ -4,6 +4,7 @@ comments: true
 title: "三维刚体运动总结"
 date: 2021-07-22 12:00:00
 tags: 3D
+typora-root-url: ../..
 ---
 
 > 本文参考《SLAM十四讲》，总结了刚性变化的几种表示方法。
@@ -178,7 +179,7 @@ $$
 
 证明懒得抄了，就参考这张图吧：
 
-<img src="{{ site.baseurl }}/assets/images/2021-7-22-3D-rotation/20210423232734.svg" alt="Orthogonal_decomposition_unit_vector_rodrigues_rotation_formula" style="zoom:120%;" />
+<img src="/zjblog/assets/images/2021-7-22-3D-rotation/20210423232734.svg" alt="Orthogonal_decomposition_unit_vector_rodrigues_rotation_formula" style="zoom:120%;" />
 
 我们利用之前介绍的反对称算子 $\mathbf{U}=[\mathbf{u}]_\times$ 进行进一步的化简，我们有：
 
@@ -267,7 +268,7 @@ Yaw 就是经度，Pitch 就是纬度，Roll 是绕自身旋转。
 
 很明显当 Pitch 为90度时，Roll 和 Yaw 的旋转方向就重合了，失去了一个自由度，就好比你站在北极点只能朝着你面对的方向往前走，不能横着走或倒着走了一样。
 
-<img src="{{ site.baseurl }}/assets/images/2021-7-22-3D-rotation/image.png" alt="image" style="zoom: 30%;" />
+<img src="/zjblog/assets/images/2021-7-22-3D-rotation/image.png" alt="image" style="zoom: 30%;" />
 
 
 
