@@ -16,7 +16,7 @@ typora-root-url: ..
 <h2 id='about-me'>About Me</h2>
 </center>
 
-一只无可救药的屑妹控，完全不懂深度学习，文章都是乱写的，写博客的目的是为了逃避做实验hhh。
+屑肥宅一只，完全不懂深度学习，文章都是乱写的，写博客的目的是为了逃避做实验hhh。
 
 ### Education experience
 
