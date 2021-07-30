@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "How do I build this blog?"
 date: 2021-07-21 12:00:00
-tags: blog
+tags: Blog
 typora-root-url: ../..
 render_with_liquid: false
 ---
@@ -264,5 +264,4 @@ typora-root-url: ../..
 ### 文章不显示
 
 参考 [在 Github 上搭建自己的博客 - Harttle Land](https://harttle.land/2013/10/18/github-homepage-tutorial.html) ，如果文章没有显示，可能是文件名里的文章日期在未来。这种情况 Jekyll 默认是不产出 HTML 的。但也有可能是你所在的时区比 Github Pages 服务所在的时区更提前，如果要强制未来日期的文章都显示，可以在 `_config.yml` 里加入 `future: true` 配置。
-
 
