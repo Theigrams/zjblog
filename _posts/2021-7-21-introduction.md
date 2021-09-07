@@ -265,3 +265,41 @@ typora-root-url: ../..
 
 参考 [在 Github 上搭建自己的博客 - Harttle Land](https://harttle.land/2013/10/18/github-homepage-tutorial.html) ，如果文章没有显示，可能是文件名里的文章日期在未来。这种情况 Jekyll 默认是不产出 HTML 的。但也有可能是你所在的时区比 Github Pages 服务所在的时区更提前，如果要强制未来日期的文章都显示，可以在 `_config.yml` 里加入 `future: true` 配置。
 
+
+
+### 插入网页
+
+有时候插入代码不方便，可以将 jupyter notebook 转化成网页，然后再嵌入文章中，对于网页 [PCA.html](/zjblog/assets/images/2021-7-21-introduction/PCA.html)，嵌入代码为：
+
+```html
+<iframe width="750"  height = "600" src="/zjblog/assets/images/2021-7-21-introduction/PCA.html"  frameborder="0"  allowfullscreen></iframe>
+```
+
+效果如下：
+
+<iframe width="750"  height = "600" src="/zjblog/assets/images/2021-7-21-introduction/PCA.html"  frameborder="0"  allowfullscreen></iframe>
+
+
+
+### 后台管理
+
+> [Jekyll Admin](https://github.com/jekyll/jekyll-admin): A Jekyll plugin that provides users with a traditional CMS-style graphical interface to author content and administer Jekyll sites. The project is divided into two parts. A Ruby-based HTTP API that handles Jekyll and filesystem operations, and a Javascript-based front end, built on that API.
+
+在 `_config.yml` 中添加如下配置即可
+
+```yaml
+jekyll_admin:
+  hidden_links:
+    - posts
+    - pages
+    - staticfiles
+    - datafiles
+    - configuration
+  homepage: "pages"
+```
+
+用法
+
+1. Start Jekyll as you would normally (`bundle exec jekyll serve`)
+2. Navigate to [http://localhost:4000/admin](http://localhost:4000/admin) to access the administrative interface
+
