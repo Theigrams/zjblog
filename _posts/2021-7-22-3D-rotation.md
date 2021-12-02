@@ -16,9 +16,9 @@ typora-root-url: ../..
 {:toc}
 
 
-## 旋转矩阵
+## 1. 旋转矩阵
 
-### 点和坐标系
+### 1.1. 点和坐标系
 
 $$
 \mathbf{a}=\left[ \mathbf{e}_1,\mathbf{e}_2,\mathbf{e}_3 \right] \left[ \begin{array}{c}
@@ -83,7 +83,7 @@ $$
 
 
 
-### 欧式坐标变换
+### 1.2. 欧式坐标变换
 
 
 $$
@@ -125,7 +125,7 @@ $\mathrm{SO}(n)$是**特殊正交群**（Special Orthogonal Group）的意思。
 
 
 
-### 变换矩阵与齐次坐标
+### 1.3. 变换矩阵与齐次坐标
 
 $$
 \left[ \begin{array}{l}
@@ -160,7 +160,7 @@ $$
 $$
 
 
-## 旋转向量
+## 2. 旋转向量
 
 任意旋转都可以用**一个旋转轴** 和 **一个旋转角** 来刻画。
 
@@ -170,7 +170,7 @@ $$
 
 那么旋转向量怎么求呢？
 
-### Rodrigues' rotation formula
+### 2.1. Rodrigues' rotation formula
 
 参考 Wiki 上的 [Rodrigues' rotation formula](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula) ：对于一个向量 $\mathbf{v}$ ，现在绕**单位**轴 $\mathbf{k}$ 做 $\theta$ 角度的旋转，那么 $\mathbf{v}_\mathrm{rot}$ 应该等于什么呢？
 $$
@@ -259,7 +259,7 @@ $$
 
 
 
-### 万向锁
+### 2.2. 万向锁
 
 其实很多文章都没说清楚，其实是因为定义不清晰，放一张图就懂了。
 Yaw 就是经度，Pitch 就是纬度，Roll 是绕自身旋转。
@@ -272,9 +272,9 @@ Yaw 就是经度，Pitch 就是纬度，Roll 是绕自身旋转。
 
 
 
-## 四元数
+## 3. 四元数
 
-### 定义
+### 3.1. 定义
 
 一个四元数$\mathbf{q}$拥有一个实部和三个虚部，像下面这样：
 
@@ -309,7 +309,7 @@ $$
 
 
 
-### 用四元数表示旋转
+### 3.2. 用四元数表示旋转
 
 假设一个空间三维点$\mathbf{p} = [x,y,z]\in \mathbb{R}^3$，以及一个由单位四元数$\mathbf{q}$指定的旋转。
 
@@ -329,7 +329,7 @@ $$
 
 
 
-### 四元数到其他旋转表示的转换
+### 3.3. 四元数到其他旋转表示的转换
 
 任意单位四元数描述了一个旋转，该旋转亦可用**旋转矩阵**或**旋转向量**描述。
 
@@ -357,7 +357,7 @@ $$
 \mathbf{n}=\frac{\mathbf{v}}{\sqrt{1-s^2}}=\frac{\mathbf{v}}{\sin \frac{\theta}{2}}
 $$
 
-### 小结
+### 3.4. 小结
 
 设四元数$\mathbf{q} = q_0+q_1i+q_2j+q_3k$，对应的旋转矩阵$\mathbf{R}$为
 
@@ -385,7 +385,7 @@ $$
 
 
 
-## 参考
+## 4. 参考
 
 1. [没那么简单——说说旋转](https://zhuanlan.zhihu.com/p/74243563) - 知乎 (zhihu.com)
 

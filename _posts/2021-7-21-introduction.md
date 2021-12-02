@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-title: "How do I build this blog?"
+title: "博客搭建指南"
 date: 2021-07-21 12:00:00
 tags: Blog
 typora-root-url: ../..
