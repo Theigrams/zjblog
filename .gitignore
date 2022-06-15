@@ -9,7 +9,7 @@ _site
 *.gem
 .ipynb_checkpoints
 .ipynb_checkpoints/*
-*.ipynb
+# *.ipynb
 *.aux
 *.log
 *.out
