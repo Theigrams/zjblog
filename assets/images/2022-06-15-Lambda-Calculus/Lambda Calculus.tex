@@ -1,0 +1,1722 @@
+\documentclass[11pt]{ctexart}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Lambda Calculus}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{lambda-calculus-for-humans}{%
+\section{Lambda Calculus for Humans}\label{lambda-calculus-for-humans}}
+
+\hypertarget{ux524dux8a00}{%
+\subsection{前言}\label{ux524dux8a00}}
+
+这是一个写给正常人学习的\(𝜆\)演算教程，如果你搜索「Lambda
+演算」，维基百科上的说明长这样：
+
+\begin{verbatim}
+0 = λf.λx.x
+1 = λf.λx.f x
+2 = λf.λx.f (f x)
+3 = λf.λx.f (f (f x))
+\end{verbatim}
+
+然后你搜索「A Tutorial Introduction to the Lambda
+Calculus」，得到的结果更抽象了：
+
+\[
+\begin{aligned}
+1 \equiv& \lambda s z .s(z) \\
+2 \equiv& \lambda s z .s(s(z)) \\
+3 \equiv& \lambda s z .s(s(s(z)))\\
+\mathrm{S} \equiv& \lambda wyx.y(wyx)\\
+\mathrm{S0} \equiv& (\lambda wyx.y(wyx))(\lambda sz.z)
+\end{aligned}
+\]
+
+研究表明，长时间观看这些抽象的算符会造成心理上的不适，并容易产生智商上的挫败感，这对正常人类的心智是有害的。
+
+因此我肩负着拯救人类的使命，写下了这一份「给正常人看的
+\(λ\)-calculus教程」。
+
+\hypertarget{ux51fdux6570ux5f0fux7f16ux7a0b}{%
+\subsection{函数式编程}\label{ux51fdux6570ux5f0fux7f16ux7a0b}}
+
+首先，让我们摒弃掉那些\(α\)-conversion、\(β\)-reduction、currying这些让人san值狂掉的术语，先来介绍一个更广为人知的术语「函数式编程」(Functional
+Calculus)，它的核心思想很简单：\textbf{用函数来表达一切}。
+
+传统编程范式中，我们面向的对象主要是变量，而在函数式编程中，我们面向的对象是函数，举个例子，我们定义一个\texttt{now}函数打印日期
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{now}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Today is: }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{data}\PY{p}{)}
+
+\PY{n}{data} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2022\PYZhy{}6\PYZhy{}11}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{now}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Today is: 2022-6-11
+    \end{Verbatim}
+
+    这就是一个非常传统的面向变量的函数：输入一个变量，然后对变量进行操作。
+
+函数式编程输入的就是一个函数，然后对函数进行操作，比如我们定义一个\texttt{log}函数打印输入函数的函数名：
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{log}\PY{p}{(}\PY{n}{func}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{func}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{)}
+
+\PY{n}{log}\PY{p}{(}\PY{n}{now}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+now
+    \end{Verbatim}
+
+    但是这样有一点不好，那就是我们没法在调用\texttt{now}函数的同时也打印出函数名，因此我们将\texttt{log}函数稍微修改一下：
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{log}\PY{p}{(}\PY{n}{func}\PY{p}{)}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf}{F}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{call }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{():}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{func}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{)}
+        \PY{k}{return} \PY{n}{func}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+    \PY{k}{return} \PY{n}{F}
+
+\PY{n}{log}\PY{p}{(}\PY{n}{now}\PY{p}{)}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+call now():
+Today is: 2022-6-11
+    \end{Verbatim}
+
+    这样将\texttt{log}函数变成了一个二阶函数，于是一切就OK了。
+
+PS：其实在Python中有一个更优雅的写法，那就是「装饰器」(Decorator)，本质就是额外执行了一个
+\texttt{now\ =\ log(now)}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@log}
+\PY{k}{def} \PY{n+nf}{now}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Today is: }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{data}\PY{p}{)}
+
+\PY{n}{now}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+call now():
+Today is: 2022-6-11
+    \end{Verbatim}
+
+    \hypertarget{ux903bux8f91ux8fd0ux7b97}{%
+\subsection{逻辑运算}\label{ux903bux8f91ux8fd0ux7b97}}
+
+    \hypertarget{ux6570ux5b57ux7f16ux7801}{%
+\subsubsection{数字编码}\label{ux6570ux5b57ux7f16ux7801}}
+
+在计算机中，我们可以用数字来编码\texttt{False}和\texttt{True}
+
+\[
+\text{False} \qquad \longleftrightarrow \qquad 0
+\] \[
+\text{True} \qquad \longleftrightarrow \qquad 1
+\]
+
+逻辑运算\texttt{not}、\texttt{and}和\texttt{or}也可以基于数字来实现
+
+\[
+\text{not}\ x \qquad \longleftrightarrow \qquad 1-x \quad \ \   \] \[
+x \ \text{and}\ y \qquad \longleftrightarrow \qquad x y \qquad \quad \ \
+\] \[
+x \ \text{or}\ y \qquad \longleftrightarrow \qquad x + y - x y
+\]
+
+那么问题就来了，我们可不可以用函数来编码\texttt{True}和\texttt{False}呢？
+
+    \hypertarget{true-false-ux7684ux5b9aux4e49}{%
+\subsubsection{True, False 的定义}\label{true-false-ux7684ux5b9aux4e49}}
+
+在传统函数思想中，True和False都是Bool变量，但在\(λ\)-演算中，所有的对象都是一个函数。
+
+因此我们使用两个函数来表示True和False： \[
+\text{TRUE}(x,y) \ = \ x, \quad \quad \text{FALSE}(x,y) \ = \ y
+\] 为什么要这样定义呢？我们暂且不纠结这个问题，先来看下面这段代码
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{TRUE}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{y}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{x}
+
+\PY{k}{def} \PY{n+nf}{FALSE}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{y}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{y}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{TRUE}\PY{p}{(}\PY{n}{TRUE}\PY{p}{,}\PY{n}{FALSE}\PY{p}{)}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{TRUE}\PY{p}{(}\PY{n}{FALSE}\PY{p}{,}\PY{n}{TRUE}\PY{p}{)}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{FALSE}\PY{p}{(}\PY{n}{TRUE}\PY{p}{,}\PY{n}{FALSE}\PY{p}{)}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{FALSE}\PY{p}{(}\PY{n}{FALSE}\PY{p}{,}\PY{n}{TRUE}\PY{p}{)}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+TRUE
+FALSE
+FALSE
+TRUE
+    \end{Verbatim}
+
+    我们看到了什么？\texttt{TRUE(TRUE,FALSE)}居然返回了函数\texttt{TRUE}本身！
+
+是不是有点感觉了，我们写一个\texttt{show}函数来作为解码器
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{show}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{TRUE}\PY{p}{,}\PY{n}{FALSE}\PY{p}{)}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{)}
+
+\PY{n}{show}\PY{p}{(}\PY{n}{TRUE}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{FALSE}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+TRUE
+FALSE
+    \end{Verbatim}
+
+    \hypertarget{not-and-or}{%
+\subsubsection{Not, And, Or}\label{not-and-or}}
+
+根据 True和 False
+的定义，我们将两个变量的位置进行交换，便可定义出NOT函数 \[
+\text{NOT}(f)  \ = \ f(\text{FALSE},\text{TRUE}) 
+\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{NOT}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{f}\PY{p}{(}\PY{n}{FALSE}\PY{p}{,}\PY{n}{TRUE}\PY{p}{)}
+
+\PY{n}{show}\PY{p}{(}\PY{n}{NOT}\PY{p}{(}\PY{n}{TRUE}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{NOT}\PY{p}{(}\PY{n}{FALSE}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+FALSE
+TRUE
+    \end{Verbatim}
+
+    \texttt{NOT(TRUE)}返回了函数\texttt{FALSE}，而\texttt{NOT(FALSE)}返回了函数\texttt{TRUE}！
+
+那么你先不往下看，能自己想象出怎么定义\texttt{AND}函数吗？
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{AND}\PY{p}{(}\PY{n}{f}\PY{p}{,}\PY{n}{g}\PY{p}{)}\PY{p}{:}
+    \PY{k}{pass}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \texttt{AND(f,g)==TRUE}
+函数要求\texttt{f}和\texttt{g}都是TRUE，当\texttt{f}为FALSE时，会返回第二个参数，因为我们可以返回
+\texttt{f(?,f)}。
+
+如果\texttt{f}为TRUE，返回第一个参数中的\texttt{?}，我们可以将\texttt{?}设为\texttt{g}本身，即
+
+\[
+\text{AND}(f,g) \ = \ f(\,g, f)
+\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{AND}\PY{p}{(}\PY{n}{f}\PY{p}{,}\PY{n}{g}\PY{p}{)}\PY{p}{:} 
+    \PY{k}{return} \PY{n}{f}\PY{p}{(}\PY{n}{g}\PY{p}{,}\PY{n}{f}\PY{p}{)}
+
+\PY{n}{show}\PY{p}{(}\PY{n}{AND}\PY{p}{(}\PY{n}{TRUE}\PY{p}{,}\PY{n}{TRUE}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{AND}\PY{p}{(}\PY{n}{TRUE}\PY{p}{,}\PY{n}{FALSE}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{AND}\PY{p}{(}\PY{n}{FALSE}\PY{p}{,}\PY{n}{TRUE}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{AND}\PY{p}{(}\PY{n}{FALSE}\PY{p}{,}\PY{n}{FALSE}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+TRUE
+FALSE
+FALSE
+FALSE
+    \end{Verbatim}
+
+    OR函数也是类似的：
+
+\[
+\text{OR}(f,g) \ = \ f(f,g )
+\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{OR}\PY{p}{(}\PY{n}{f}\PY{p}{,}\PY{n}{g}\PY{p}{)}\PY{p}{:}  
+    \PY{k}{return} \PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{,}\PY{n}{g}\PY{p}{)}
+
+\PY{k}{assert} \PY{n}{OR}\PY{p}{(}\PY{n}{TRUE}\PY{p}{,}\PY{n}{TRUE}\PY{p}{)} \PY{o+ow}{is} \PY{n}{TRUE}
+\PY{k}{assert} \PY{n}{OR}\PY{p}{(}\PY{n}{TRUE}\PY{p}{,}\PY{n}{FALSE}\PY{p}{)} \PY{o+ow}{is} \PY{n}{TRUE}
+\PY{k}{assert} \PY{n}{OR}\PY{p}{(}\PY{n}{FALSE}\PY{p}{,}\PY{n}{TRUE}\PY{p}{)} \PY{o+ow}{is} \PY{n}{TRUE}
+\PY{k}{assert} \PY{n}{OR}\PY{p}{(}\PY{n}{FALSE}\PY{p}{,}\PY{n}{FALSE}\PY{p}{)} \PY{o+ow}{is} \PY{n}{FALSE}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{ux67efux91ccux5316currying}{%
+\subsubsection{柯里化(Currying)}\label{ux67efux91ccux5316currying}}
+
+柯里化就是将所有的函数变成只有一个参数，例如一个双参数函数\(f(x,y)\)，我们将其变成一个二阶函数\(F(x)(y)\)
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{f}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{y}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{x}\PY{o}{+}\PY{n}{y}
+
+\PY{k}{def} \PY{n+nf}{F}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf}{Fx}\PY{p}{(}\PY{n}{y}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{n}{x}\PY{o}{+}\PY{n}{y}
+    \PY{k}{return} \PY{n}{Fx}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{F}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+xy
+xy
+    \end{Verbatim}
+
+    我们可以将之前的逻辑函数都写成柯里化的形式
+
+\[
+N(f,x,y) \ = \ f(y,x) 
+\]
+
+\[
+A(f,g,x,y) \ = \ f(\,g(x,y) , y)
+\]
+
+\[
+O(f,g,x,y) \ = \ f(x,\,g(x,y) )
+\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{T}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{k}{lambda} \PY{n}{y}\PY{p}{:} \PY{n}{x}
+
+\PY{k}{def} \PY{n+nf}{F}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{k}{lambda} \PY{n}{y}\PY{p}{:} \PY{n}{y}
+
+\PY{k}{def} \PY{n+nf}{N}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{f}\PY{p}{(}\PY{n}{F}\PY{p}{)}\PY{p}{(}\PY{n}{T}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{A}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{k}{lambda} \PY{n}{g}\PY{p}{:} \PY{n}{f}\PY{p}{(}\PY{n}{g}\PY{p}{)}\PY{p}{(}\PY{n}{f}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{O}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{k}{lambda} \PY{n}{g}\PY{p}{:} \PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{(}\PY{n}{g}\PY{p}{)}
+
+\PY{k}{assert} \PY{n}{T}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}\PY{p}{(}\PY{k+kc}{False}\PY{p}{)} \PY{o+ow}{is} \PY{k+kc}{True}
+\PY{k}{assert} \PY{n}{F}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}\PY{p}{(}\PY{k+kc}{False}\PY{p}{)} \PY{o+ow}{is} \PY{k+kc}{False}
+\PY{k}{assert} \PY{n}{N}\PY{p}{(}\PY{n}{T}\PY{p}{)} \PY{o+ow}{is} \PY{n}{F}
+\PY{k}{assert} \PY{n}{N}\PY{p}{(}\PY{n}{F}\PY{p}{)} \PY{o+ow}{is} \PY{n}{T}
+\PY{k}{assert} \PY{n}{A}\PY{p}{(}\PY{n}{T}\PY{p}{)}\PY{p}{(}\PY{n}{T}\PY{p}{)} \PY{o+ow}{is} \PY{n}{T}
+\PY{k}{assert} \PY{n}{A}\PY{p}{(}\PY{n}{T}\PY{p}{)}\PY{p}{(}\PY{n}{F}\PY{p}{)} \PY{o+ow}{is} \PY{n}{F}
+\PY{k}{assert} \PY{n}{O}\PY{p}{(}\PY{n}{T}\PY{p}{)}\PY{p}{(}\PY{n}{F}\PY{p}{)} \PY{o+ow}{is} \PY{n}{T}
+\PY{k}{assert} \PY{n}{O}\PY{p}{(}\PY{n}{F}\PY{p}{)}\PY{p}{(}\PY{n}{F}\PY{p}{)} \PY{o+ow}{is} \PY{n}{F}
+\end{Verbatim}
+\end{tcolorbox}
+
+    我们也可以写一个\texttt{curry}函数将\texttt{f(x,y)}转化成柯里化的版本\texttt{F(x)(y)}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{curry}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{k}{lambda} \PY{n}{y}\PY{p}{:} \PY{n}{f}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{y}\PY{p}{)}
+
+\PY{n}{F} \PY{o}{=} \PY{n}{curry}\PY{p}{(}\PY{n}{f}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{F}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+xy
+    \end{Verbatim}
+
+    在经过非平凡的思考（参考 https://zh.javascript.info/currying-partials
+）之后，我们可以写出柯里化函数\texttt{curry}的通用形式：
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{curry}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf}{curried}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{)}\PY{p}{:}
+\PY{c+c1}{\PYZsh{}         print(\PYZsq{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZsq{},*args,\PYZsq{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZsq{})}
+        \PY{k}{if} \PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{args}\PY{p}{)} \PY{o}{==} \PY{n}{f}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}code\PYZus{}\PYZus{}}\PY{o}{.}\PY{n}{co\PYZus{}argcount}\PY{p}{)}\PY{p}{:}
+            \PY{k}{return} \PY{n}{f}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{)}
+        \PY{k}{else}\PY{p}{:}
+            \PY{k}{return} \PY{k}{lambda} \PY{o}{*}\PY{n}{args2}\PY{p}{:} \PY{n}{curried}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{,}\PY{o}{*}\PY{n}{args2}\PY{p}{)}
+    \PY{k}{return} \PY{n}{curried}
+\end{Verbatim}
+\end{tcolorbox}
+
+    这里的\texttt{f.\_\_code\_\_.co\_argcount}返回\texttt{f}定义时的参数个数，例如\texttt{f3.\_\_code\_\_.co\_argcount=3}。
+
+这段代码的思想就是当\texttt{f}的输入参数个数\texttt{len(args)}
+与定义参数个数\texttt{f.\_\_code\_\_.co\_argcount}一致时，就直接输出\texttt{f(*args)}。
+
+当参数不够时，就先把当前参数\texttt{*args}传进去，再递归调用外面一层的参数\texttt{*args2}。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{f1} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}
+\PY{n}{F1} \PY{o}{=} \PY{n}{curry}\PY{p}{(}\PY{n}{f1}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{F1}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{f2} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{,}\PY{n}{y}\PY{p}{:} \PY{n}{x}\PY{o}{+}\PY{n}{y}
+\PY{n}{F2} \PY{o}{=} \PY{n}{curry}\PY{p}{(}\PY{n}{f2}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{F2}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{f3} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{,}\PY{n}{y}\PY{p}{,}\PY{n}{z}\PY{p}{:} \PY{n}{x}\PY{o}{+}\PY{n}{y}\PY{o}{+}\PY{n}{z}
+\PY{n}{F3} \PY{o}{=} \PY{n}{curry}\PY{p}{(}\PY{n}{f3}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{F3}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{z}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{f4} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{,}\PY{n}{y}\PY{p}{,}\PY{n}{z}\PY{p}{,}\PY{n}{w}\PY{p}{:} \PY{n}{x}\PY{o}{+}\PY{n}{y}\PY{o}{+}\PY{n}{z}\PY{o}{+}\PY{n}{w}
+\PY{n}{F4} \PY{o}{=} \PY{n}{curry}\PY{p}{(}\PY{n}{f4}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{F4}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{F4}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{F4}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+x
+xy
+xyz
+10
+10
+10
+    \end{Verbatim}
+
+    如果你难以理解的话，可以取消掉\texttt{curry}函数中的注释，观察每次调用时传入的参数。
+
+我们可以直接用\texttt{curry}函数将逻辑函数柯里化，当然，这和我们在上面直接定义的柯里化逻辑函数有着细微的区别，不过这并不重要。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{T} \PY{o}{=} \PY{n}{curry}\PY{p}{(}\PY{n}{TRUE}\PY{p}{)}
+\PY{n}{F} \PY{o}{=} \PY{n}{curry}\PY{p}{(}\PY{n}{FALSE}\PY{p}{)}
+\PY{n}{N} \PY{o}{=} \PY{n}{curry}\PY{p}{(}\PY{n}{NOT}\PY{p}{)}
+\PY{n}{A} \PY{o}{=} \PY{n}{curry}\PY{p}{(}\PY{n}{AND}\PY{p}{)}
+\PY{n}{O} \PY{o}{=} \PY{n}{curry}\PY{p}{(}\PY{n}{OR}\PY{p}{)}
+
+\PY{k}{assert} \PY{n}{T}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}\PY{p}{(}\PY{k+kc}{False}\PY{p}{)} \PY{o+ow}{is} \PY{k+kc}{True}
+\PY{k}{assert} \PY{n}{F}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}\PY{p}{(}\PY{k+kc}{False}\PY{p}{)} \PY{o+ow}{is} \PY{k+kc}{False}
+\PY{k}{assert} \PY{n}{N}\PY{p}{(}\PY{n}{T}\PY{p}{)} \PY{o+ow}{is} \PY{n}{FALSE}
+\PY{k}{assert} \PY{n}{N}\PY{p}{(}\PY{n}{F}\PY{p}{)} \PY{o+ow}{is} \PY{n}{TRUE}
+\PY{k}{assert} \PY{n}{A}\PY{p}{(}\PY{n}{T}\PY{p}{)}\PY{p}{(}\PY{n}{T}\PY{p}{)} \PY{o+ow}{is} \PY{n}{T}
+\PY{k}{assert} \PY{n}{A}\PY{p}{(}\PY{n}{T}\PY{p}{)}\PY{p}{(}\PY{n}{F}\PY{p}{)} \PY{o+ow}{is} \PY{n}{F}
+\PY{k}{assert} \PY{n}{O}\PY{p}{(}\PY{n}{T}\PY{p}{)}\PY{p}{(}\PY{n}{F}\PY{p}{)} \PY{o+ow}{is} \PY{n}{T}
+\PY{k}{assert} \PY{n}{O}\PY{p}{(}\PY{n}{F}\PY{p}{)}\PY{p}{(}\PY{n}{F}\PY{p}{)} \PY{o+ow}{is} \PY{n}{F}
+
+\PY{k}{def} \PY{n+nf}{show}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{TRUE}\PY{p}{,}\PY{n}{FALSE}\PY{p}{)}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{)}
+    
+\PY{n}{show}\PY{p}{(}\PY{n}{T}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{F}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{N}\PY{p}{(}\PY{n}{T}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{A}\PY{p}{(}\PY{n}{T}\PY{p}{)}\PY{p}{(}\PY{n}{F}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{O}\PY{p}{(}\PY{n}{T}\PY{p}{)}\PY{p}{(}\PY{n}{F}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+TRUE
+FALSE
+FALSE
+FALSE
+TRUE
+    \end{Verbatim}
+
+    \hypertarget{ux5bf9ux81eaux7136ux6570ux7f16ux7801}{%
+\subsection{对自然数编码}\label{ux5bf9ux81eaux7136ux6570ux7f16ux7801}}
+
+既然能用函数对逻辑运算编码，当然也可以对自然数编码，我们通过如下方式定义：
+
+\begin{itemize}
+\tightlist
+\item
+  每个自然数都是一个函数，它的输入和输出都是函数
+\item
+  函数0对于任何输入\(f(\cdot)\)，输出都是一个恒等函数\(x\to x\)
+\item
+  函数1对于输入\(f(\cdot)\)，返回\(f\)本身
+\item
+  函数2对于输入\(f(\cdot)\)，返回\(f\)的二阶函数\(f(f(\cdot))\)
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def}  \PY{n+nf}{ZERO}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:} \PY{k}{return} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}
+\PY{k}{def}   \PY{n+nf}{ONE}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:} \PY{k}{return} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{f}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+\PY{k}{def}   \PY{n+nf}{TWO}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:} \PY{k}{return} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{k}{def} \PY{n+nf}{THREE}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:} \PY{k}{return} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{k}{def}  \PY{n+nf}{FOUR}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:} \PY{k}{return} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{k}{def}  \PY{n+nf}{FIVE}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:} \PY{k}{return} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{k}{def}   \PY{n+nf}{SIX}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:} \PY{k}{return} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{hi} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ World}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{x} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Hello,}\PY{l+s+s1}{\PYZsq{}}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ZERO}\PY{p}{(}\PY{n}{hi}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ONE}\PY{p}{(}\PY{n}{hi}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{TWO}\PY{p}{(}\PY{n}{hi}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{THREE}\PY{p}{(}\PY{n}{hi}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{FOUR}\PY{p}{(}\PY{n}{hi}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{FIVE}\PY{p}{(}\PY{n}{hi}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{SIX}\PY{p}{(}\PY{n}{hi}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Hello,
+Hello, World
+Hello, World World
+Hello, World World World
+Hello, World World World World
+Hello, World World World World World
+Hello, World World World World World World
+    \end{Verbatim}
+
+    如果我们定义零元为0，每一个后继就是前驱元素+1，那么就能得到常规形式的自然数：
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{Num}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{x} \PY{o}{+} \PY{l+m+mi}{1}
+\PY{n}{x} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ZERO}\PY{p}{(}\PY{n}{Num}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ONE}\PY{p}{(}\PY{n}{Num}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{TWO}\PY{p}{(}\PY{n}{Num}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{THREE}\PY{p}{(}\PY{n}{Num}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+0
+1
+2
+3
+    \end{Verbatim}
+
+    我们借此将函数版的自然数转化成常规形式的自然数
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{show}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{x}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{show}\PY{p}{(}\PY{n}{ZERO}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{ONE}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{TWO}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{THREE}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+0
+1
+2
+3
+    \end{Verbatim}
+
+    \hypertarget{next-number}{%
+\subsubsection{Next Number}\label{next-number}}
+
+显然，我们不可能手动定义所有的自然数函数，因此我们需要定义一个''后继函数''：对于任意一个自然数\texttt{A}，我们定义它的后继为
+\texttt{NEXT(A)}。
+
+我们可以先写出一个非柯里化版本：
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{NEXT}\PY{p}{(}\PY{n}{A}\PY{p}{,}\PY{n}{f}\PY{p}{,}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{f}\PY{p}{(}\PY{n}{A}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{fish} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ fish}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{x} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{I want:}\PY{l+s+s1}{\PYZsq{}}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{NEXT}\PY{p}{(}\PY{n}{THREE}\PY{p}{,}\PY{n}{fish}\PY{p}{,}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+I want: fish fish fish fish
+    \end{Verbatim}
+
+    如果要柯里化，那么我们可以使用前面定义的\texttt{curry}函数：
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{NEXT\PYZus{}c} \PY{o}{=} \PY{n}{curry}\PY{p}{(}\PY{n}{NEXT}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{NEXT\PYZus{}c}\PY{p}{(}\PY{n}{THREE}\PY{p}{)}\PY{p}{(}\PY{n}{fish}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{NEXT\PYZus{}c}\PY{p}{(}\PY{n}{THREE}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+I want: fish fish fish fish
+4
+    \end{Verbatim}
+
+    手写柯里化版本也很简单：
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{NEXT}\PY{p}{(}\PY{n}{A}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{k}{lambda} \PY{n}{f}\PY{p}{:} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{f}\PY{p}{(}\PY{n}{A}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{show}\PY{p}{(}\PY{n}{NEXT}\PY{p}{(}\PY{n}{THREE}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+4
+    \end{Verbatim}
+
+    \hypertarget{ux52a0ux6cd5}{%
+\subsubsection{加法}\label{ux52a0ux6cd5}}
+
+我们要计算\texttt{A+B}，以A为起点，计算B次NEXT即可
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{ADD}\PY{p}{(}\PY{n}{A}\PY{p}{,}\PY{n}{B}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{B}\PY{p}{(}\PY{n}{NEXT}\PY{p}{)}\PY{p}{(}\PY{n}{A}\PY{p}{)}
+
+\PY{n}{show}\PY{p}{(}\PY{n}{ADD}\PY{p}{(}\PY{n}{TWO}\PY{p}{,}\PY{n}{THREE}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+5
+    \end{Verbatim}
+
+    显然我们的加法是满足交换律的
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{show}\PY{p}{(}\PY{n}{ADD}\PY{p}{(}\PY{n}{ZERO}\PY{p}{,}\PY{n}{SIX}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{ADD}\PY{p}{(}\PY{n}{ONE}\PY{p}{,}\PY{n}{FIVE}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{ADD}\PY{p}{(}\PY{n}{TWO}\PY{p}{,}\PY{n}{FOUR}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{ADD}\PY{p}{(}\PY{n}{THREE}\PY{p}{,}\PY{n}{THREE}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{ADD}\PY{p}{(}\PY{n}{FOUR}\PY{p}{,}\PY{n}{TWO}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{ADD}\PY{p}{(}\PY{n}{FIVE}\PY{p}{,}\PY{n}{ONE}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+6
+6
+6
+6
+6
+6
+    \end{Verbatim}
+
+    \hypertarget{ux4e58ux6cd5}{%
+\subsubsection{乘法}\label{ux4e58ux6cd5}}
+
+要计算\texttt{A*B}，那么只需累加A次\texttt{B(f)}即可
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{MULTIPLY}\PY{p}{(}\PY{n}{A}\PY{p}{,}\PY{n}{B}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{k}{lambda} \PY{n}{f}\PY{p}{:} \PY{n}{A}\PY{p}{(}\PY{n}{B}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{show}\PY{p}{(}\PY{n}{MULTIPLY}\PY{p}{(}\PY{n}{FOUR}\PY{p}{,}\PY{n}{THREE}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{MULTIPLY}\PY{p}{(}\PY{n}{THREE}\PY{p}{,}\PY{n}{FOUR}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+12
+12
+    \end{Verbatim}
+
+    另一种思路是执行A次\texttt{ADD(0,B)}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{MULTIPLY}\PY{p}{(}\PY{n}{A}\PY{p}{,}\PY{n}{B}\PY{p}{)}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf}{ADD\PYZus{}B}\PY{p}{(}\PY{n}{C}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{n}{ADD}\PY{p}{(}\PY{n}{C}\PY{p}{,}\PY{n}{B}\PY{p}{)}
+    \PY{k}{return} \PY{n}{A}\PY{p}{(}\PY{n}{ADD\PYZus{}B}\PY{p}{)}\PY{p}{(}\PY{n}{ZERO}\PY{p}{)}
+
+\PY{n}{show}\PY{p}{(}\PY{n}{MULTIPLY}\PY{p}{(}\PY{n}{FOUR}\PY{p}{,}\PY{n}{THREE}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{MULTIPLY}\PY{p}{(}\PY{n}{THREE}\PY{p}{,}\PY{n}{FOUR}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+12
+12
+    \end{Verbatim}
+
+    \hypertarget{ux6307ux6570}{%
+\subsubsection{指数}\label{ux6307ux6570}}
+
+\texttt{A**B} 就是将A重复执行B次
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{POWER}\PY{p}{(}\PY{n}{A}\PY{p}{,}\PY{n}{B}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{B}\PY{p}{(}\PY{n}{A}\PY{p}{)}
+
+\PY{n}{show}\PY{p}{(}\PY{n}{POWER}\PY{p}{(}\PY{n}{FOUR}\PY{p}{,}\PY{n}{THREE}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{POWER}\PY{p}{(}\PY{n}{THREE}\PY{p}{,}\PY{n}{FOUR}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+64
+81
+    \end{Verbatim}
+
+    \hypertarget{ux51cfux6cd5}{%
+\subsubsection{减法}\label{ux51cfux6cd5}}
+
+关于减法，这并非一件简单的事情，我们首先要考虑的问题是怎么计算
+\texttt{N-ONE}，也就是找到A的前驱，除非我们知道\texttt{f}的逆函数，并且逆是唯一的。
+
+但对于一般的情况，我们的做法是定义一个函数 \[
+\Phi  \ : \ (a,b) \ \to \ (b,b+1)
+\] 对于\texttt{(ZERO,ZERO)}作用N次就得到了 \[
+\Phi^{N}  \ : \ (0,0) \ \to \ (N-1,N)
+\] 我们取第一个元素就得到了\texttt{N-ONE}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{PAIR}\PY{p}{(}\PY{n}{A}\PY{p}{,}\PY{n}{B}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{k}{lambda} \PY{n}{P}\PY{p}{:} \PY{n}{P}\PY{p}{(}\PY{n}{A}\PY{p}{,}\PY{n}{B}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{PHI}\PY{p}{(}\PY{n}{P}\PY{p}{)}\PY{p}{:}
+    \PY{n}{B} \PY{o}{=} \PY{n}{P}\PY{p}{(}\PY{n}{FALSE}\PY{p}{)}
+    \PY{k}{return} \PY{n}{PAIR}\PY{p}{(}\PY{n}{B}\PY{p}{,}\PY{n}{NEXT}\PY{p}{(}\PY{n}{B}\PY{p}{)}\PY{p}{)}
+    
+\PY{k}{def} \PY{n+nf}{PRIOR}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{p}{:}
+    \PY{n}{PHI\PYZus{}N} \PY{o}{=} \PY{n}{POWER}\PY{p}{(}\PY{n}{PHI}\PY{p}{,}\PY{n}{N}\PY{p}{)}
+    \PY{k}{return} \PY{n}{PHI\PYZus{}N}\PY{p}{(}\PY{n}{PAIR}\PY{p}{(}\PY{n}{ZERO}\PY{p}{,}\PY{n}{ZERO}\PY{p}{)}\PY{p}{)}\PY{p}{(}\PY{n}{TRUE}\PY{p}{)}
+
+\PY{n}{show}\PY{p}{(}\PY{n}{PRIOR}\PY{p}{(}\PY{n}{FOUR}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+3
+    \end{Verbatim}
+
+    在定义了前驱之后，就可以类似于加法一样定义减法了
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{30}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{SUBTRACT}\PY{p}{(}\PY{n}{A}\PY{p}{,}\PY{n}{B}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{B}\PY{p}{(}\PY{n}{PRIOR}\PY{p}{)}\PY{p}{(}\PY{n}{A}\PY{p}{)}
+
+\PY{n}{show}\PY{p}{(}\PY{n}{SUBTRACT}\PY{p}{(}\PY{n}{SIX}\PY{p}{,}\PY{n}{TWO}\PY{p}{)}\PY{p}{)}
+\PY{n}{show}\PY{p}{(}\PY{n}{SUBTRACT}\PY{p}{(}\PY{n}{POWER}\PY{p}{(}\PY{n}{TWO}\PY{p}{,}\PY{n}{FOUR}\PY{p}{)}\PY{p}{,}\PY{n}{THREE}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+4
+13
+    \end{Verbatim}
+
+    当然，这也存在着一些问题，因为我们是从零元开始的，并没有定义零元之前的''负数''，因此用小数减大数得到的依然为零元
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{show}\PY{p}{(}\PY{n}{SUBTRACT}\PY{p}{(}\PY{n}{TWO}\PY{p}{,}\PY{n}{SIX}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+0
+    \end{Verbatim}
+
+    \hypertarget{ux5224ux65adux96f6ux5143}{%
+\subsubsection{判断零元}\label{ux5224ux65adux96f6ux5143}}
+
+由零函数的定义可知，对于任何\texttt{f}，都有\texttt{ZERO(f)(x)==x}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{f} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ world}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{x} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Hello,}\PY{l+s+s1}{\PYZsq{}}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ZERO}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ONE}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{TWO}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{THREE}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Hello,
+Hello, world
+Hello, world world
+Hello, world world world
+    \end{Verbatim}
+
+    因此我们可以让\texttt{f}总是返回FALSE，让x为TRUE，那么只有零函数会返回TRUE，其他自然数都返回FALSE
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{33}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{f} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{FALSE}
+\PY{n}{x} \PY{o}{=} \PY{n}{TRUE}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ZERO}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ONE}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{TWO}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{THREE}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<function TRUE at 0x1064e5550>
+<function FALSE at 0x1064e5310>
+<function FALSE at 0x1064e5310>
+<function FALSE at 0x1064e5310>
+    \end{Verbatim}
+
+    据此可写出判断零元的函数
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{ISZERO}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{p}{:}
+    \PY{n}{f} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{FALSE}
+    \PY{k}{return} \PY{n}{N}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{(}\PY{n}{TRUE}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ISZERO}\PY{p}{(}\PY{n}{ZERO}\PY{p}{)}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ISZERO}\PY{p}{(}\PY{n}{ONE}\PY{p}{)}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ISZERO}\PY{p}{(}\PY{n}{TWO}\PY{p}{)}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{ISZERO}\PY{p}{(}\PY{n}{THREE}\PY{p}{)}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+TRUE
+FALSE
+FALSE
+FALSE
+    \end{Verbatim}
+
+    \hypertarget{ux9012ux5f52}{%
+\subsubsection{递归}\label{ux9012ux5f52}}
+
+假如我们要写一个阶乘函数
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{math} \PY{k+kn}{import} \PY{n}{factorial}
+\PY{k}{def} \PY{n+nf}{fact}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{n} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{1}
+    \PY{k}{else}\PY{p}{:}
+        \PY{k}{return} \PY{n}{n}\PY{o}{*}\PY{n}{fact}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{fact}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
+\PY{k}{assert} \PY{n}{fact}\PY{p}{(}\PY{l+m+mi}{9}\PY{p}{)} \PY{o}{==} \PY{n}{factorial}\PY{p}{(}\PY{l+m+mi}{9}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+6
+    \end{Verbatim}
+
+    如果要写成函数形式，首先要考虑的是怎么实现if else这样的流程控制。
+
+如果\texttt{N==ZERO}，那么\texttt{ISZERO(N)}就会等价于\texttt{TRUE}，而\texttt{TRUE(ONE,n*f(n-1))}会返回\texttt{ONE}。
+
+因此 \texttt{ISZERO(N)(ONE,n*f(n-1))} 就完成了流程控制。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{36}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{FACT}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{ISZERO}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{p}{(}\PY{n}{ONE}\PY{p}{,}\PY{n}{MULTIPLY}\PY{p}{(}\PY{n}{N}\PY{p}{,}\PY{n}{FACT}\PY{p}{(}\PY{n}{SUBTRACT}\PY{p}{(}\PY{n}{N}\PY{p}{,}\PY{n}{ONE}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{k}{try}\PY{p}{:}
+    \PY{n}{show}\PY{p}{(}\PY{n}{FACT}\PY{p}{(}\PY{n}{THREE}\PY{p}{)}\PY{p}{)}
+\PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{repr}\PY{p}{(}\PY{n}{e}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+RecursionError('maximum recursion depth exceeded')
+    \end{Verbatim}
+
+    但在实际运行时，可以看到我们的函数出现了无限循环的问题，这是因为Python并不是惰性求值(lazy
+evaluation)的，它会先计算参数，再把参数的值代入函数
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{37}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{f}\PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{a}
+
+\PY{k}{try}\PY{p}{:}
+    \PY{n}{f}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{repr}\PY{p}{(}\PY{n}{e}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+ZeroDivisionError('division by zero')
+    \end{Verbatim}
+
+    在上面这个例子中，虽然我们并不需要参数b，但Python仍会先计算b=1/0，此时就返回了错误。
+
+避免这种情况出现的方法就是，不直接传入参数，而是传入返回参数的函数:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{38}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{f}\PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{a}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{f}\PY{p}{(}\PY{k}{lambda}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{k}{lambda}\PY{p}{:} \PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{0}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{38}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+1
+\end{Verbatim}
+\end{tcolorbox}
+        
+    此时Python计算的步骤为：
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{a=lambda:\ 1}
+\item
+  \texttt{b=lambda:\ 1/0}
+\item
+  \texttt{a()=1}
+\item
+  \texttt{return\ 1}
+\end{enumerate}
+
+使用类似的方法对我们的原函数进行一些小改造，最终就能正常进行了
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{39}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{LAZY\PYZus{}TRUE} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{,}\PY{n}{y}\PY{p}{:} \PY{n}{x}\PY{p}{(}\PY{p}{)}
+\PY{n}{LAZY\PYZus{}FALSE} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{,}\PY{n}{y}\PY{p}{:} \PY{n}{y}\PY{p}{(}\PY{p}{)}
+\PY{n}{LAZY\PYZus{}ISZERO} \PY{o}{=} \PY{k}{lambda} \PY{n}{N}\PY{p}{:} \PY{n}{N}\PY{p}{(}\PY{k}{lambda} \PY{n}{\PYZus{}}\PY{p}{:} \PY{n}{LAZY\PYZus{}FALSE}\PY{p}{)}\PY{p}{(}\PY{n}{LAZY\PYZus{}TRUE}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{FACT}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{LAZY\PYZus{}ISZERO}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{p}{(}\PY{k}{lambda}\PY{p}{:} \PY{n}{ONE}\PY{p}{,}\PY{k}{lambda}\PY{p}{:} \PY{n}{MULTIPLY}\PY{p}{(}\PY{n}{N}\PY{p}{,}\PY{n}{FACT}\PY{p}{(}\PY{n}{SUBTRACT}\PY{p}{(}\PY{n}{N}\PY{p}{,}\PY{n}{ONE}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{show}\PY{p}{(}\PY{n}{FACT}\PY{p}{(}\PY{n}{THREE}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+6
+    \end{Verbatim}
+
+    \hypertarget{y-combinator}{%
+\subsection{Y combinator}\label{y-combinator}}
+
+如果我告诉你Y combinator的定义如下 \[
+Y = \lambda f . ( \lambda x. f( x (x) ) ) ( \lambda x. f( x (x) ) )
+\]
+那你肯定就开始怀疑下面的内容是否能看懂，别担心，其实很简单，忘记上面这个公式继续往下看吧。
+
+\hypertarget{ux4f9dux7136ux662fux9636ux4e58ux51fdux6570}{%
+\subsubsection{依然是阶乘函数}\label{ux4f9dux7136ux662fux9636ux4e58ux51fdux6570}}
+
+在上面的例子中，我们是这样定义阶乘函数的：
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{40}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{fact}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{n} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{1}
+    \PY{k}{else}\PY{p}{:}
+        \PY{k}{return} \PY{n}{n}\PY{o}{*}\PY{n}{fact}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{n}{fact}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{40}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+6
+\end{Verbatim}
+\end{tcolorbox}
+        
+    对于熟练掌握递归的人来说，这样貌似是非常理所当然的，但实际想一想，多少有点不可思议，因为我们在定义\texttt{fact}函数的过程中，居然用到了\texttt{fact}本身！
+
+熟悉数理逻辑的人都会对自指（self-reference）满怀敬畏之心： -
+罗素使用了自指，引发了第三次数学危机 -
+哥德尔使用了自指，得出了哥德尔不完备定理 -
+图灵使用了自指，提出了停机测试悖论
+
+为了更好地理解递归，我们现在要避免在完整定义\texttt{fact}之前调用\texttt{fact}。
+
+那么我们将函数内部的\texttt{fact}替换成\texttt{f}，这里的\texttt{f}就是我们需要的阶乘函数：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ fact(n):}
+    \ControlFlowTok{if}\NormalTok{ n }\OperatorTok{==} \DecValTok{0}\NormalTok{:}
+        \ControlFlowTok{return} \DecValTok{1}
+    \ControlFlowTok{else}\NormalTok{:}
+        \ControlFlowTok{return}\NormalTok{ n}\OperatorTok{*}\NormalTok{f(n}\OperatorTok{{-}}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+但乍一看，这个\texttt{f}是凭空出现的，因此为了提供\texttt{f}，我们给\texttt{fact}再添加一个参数：
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{41}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{fact}\PY{p}{(}\PY{n}{f}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{n} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{1}
+    \PY{k}{else}\PY{p}{:}
+        \PY{k}{return} \PY{n}{n}\PY{o}{*}\PY{n}{f}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    这样的定义是可行的吗？
+
+如果我们调用\texttt{fact(3)}肯定不对，因为\texttt{fact}有两个参数要输入。
+
+调用\texttt{fact(f,3)}也不对，\texttt{f}还是没有定义，既然\texttt{f}就是\texttt{fact}，那么我们尝试调用\texttt{fact(fact,3)}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{42}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fact}\PY{p}{(}\PY{n}{fact}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}, frame=single, framerule=2mm, rulecolor=\color{outerrorbackground}]
+\textcolor{ansi-red}{---------------------------------------------------------------------------}
+\textcolor{ansi-red}{TypeError}                                 Traceback (most recent call last)
+\textcolor{ansi-green}{/var/folders/1y/8ypw\_bc55x5d69n0rnzpwxjr0000gn/T/ipykernel\_25288/2401241230.py} in \textcolor{ansi-cyan}{<module>}
+\textcolor{ansi-green}{----> 1}\textcolor{ansi-red}{ }fact\textcolor{ansi-blue}{(}fact\textcolor{ansi-blue}{,}\textcolor{ansi-cyan}{3}\textcolor{ansi-blue}{)}
+
+\textcolor{ansi-green}{/var/folders/1y/8ypw\_bc55x5d69n0rnzpwxjr0000gn/T/ipykernel\_25288/901191219.py} in \textcolor{ansi-cyan}{fact}\textcolor{ansi-blue}{(f, n)}
+\textcolor{ansi-green-intense}{\textbf{      3}}         \textcolor{ansi-green}{return} \textcolor{ansi-cyan}{1}
+\textcolor{ansi-green-intense}{\textbf{      4}}     \textcolor{ansi-green}{else}\textcolor{ansi-blue}{:}
+\textcolor{ansi-green}{----> 5}\textcolor{ansi-red}{         }\textcolor{ansi-green}{return} n\textcolor{ansi-blue}{*}f\textcolor{ansi-blue}{(}n\textcolor{ansi-blue}{-}\textcolor{ansi-cyan}{1}\textcolor{ansi-blue}{)}
+
+\textcolor{ansi-red}{TypeError}: fact() missing 1 required positional argument: 'n'
+    \end{Verbatim}
+
+    可以看到我们的第5行中，\texttt{f(n-1)}出现了问题，因为此时其实是\texttt{fact(n-1)}，而\texttt{fact}是需要两个参数的，因此我们将其改为\texttt{f(f,n-1)}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{43}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{fact}\PY{p}{(}\PY{n}{f}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{n} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{1}
+    \PY{k}{else}\PY{p}{:}
+        \PY{k}{return} \PY{n}{n}\PY{o}{*}\PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{,}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{44}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fact}\PY{p}{(}\PY{n}{fact}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{44}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+6
+\end{Verbatim}
+\end{tcolorbox}
+        
+    这回终于正确了，但其实我们想要的阶乘函数应该是\texttt{fact(3)=6}，于是我们可以稍微修改一下：
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{45}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{F}\PY{p}{(}\PY{n}{f}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{n} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{1}
+    \PY{k}{else}\PY{p}{:}
+        \PY{k}{return} \PY{n}{n}\PY{o}{*}\PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{,}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{fact} \PY{o}{=} \PY{k}{lambda} \PY{n}{n}\PY{p}{:} \PY{n}{F}\PY{p}{(}\PY{n}{F}\PY{p}{,}\PY{n}{n}\PY{p}{)}
+\PY{n}{fact}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{45}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+6
+\end{Verbatim}
+\end{tcolorbox}
+        
+    将其柯里化得到
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{46}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{F} \PY{o}{=} \PY{k}{lambda} \PY{n}{f}\PY{p}{:} \PY{k}{lambda} \PY{n}{n}\PY{p}{:} \PY{l+m+mi}{1} \PY{k}{if} \PY{n}{n}\PY{o}{==}\PY{l+m+mi}{0} \PY{k}{else} \PY{n}{n}\PY{o}{*}\PY{n}{f}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{fact} \PY{o}{=} \PY{n}{F}\PY{p}{(}\PY{n}{F}\PY{p}{)}
+\PY{n}{fact}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
+\PY{k}{assert} \PY{n}{fact}\PY{p}{(}\PY{l+m+mi}{9}\PY{p}{)} \PY{o}{==} \PY{n}{factorial}\PY{p}{(}\PY{l+m+mi}{9}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    让我们回到最初的定义：
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{47}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fact} \PY{o}{=} \PY{p}{(}\PY{k}{lambda} \PY{n}{f}\PY{p}{:} \PY{k}{lambda} \PY{n}{n}\PY{p}{:} \PY{l+m+mi}{1} \PY{k}{if} \PY{n}{n}\PY{o}{==}\PY{l+m+mi}{0} \PY{k}{else} \PY{n}{n}\PY{o}{*}\PY{n}{f}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{p}{(}\PY{n}{fact}\PY{p}{)}
+\PY{n}{fact}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{47}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+24
+\end{Verbatim}
+\end{tcolorbox}
+        
+    如果我们用\texttt{R}来代替\texttt{lambda\ f:\ lambda\ n:\ 1\ if\ n==0\ else\ n*f(n-1)}，那么就有
+\texttt{fact\ =\ R(fact)}，\texttt{fact}就是\texttt{R}的一个不动点
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{R} \PY{o}{=} \PY{k}{lambda} \PY{n}{f}\PY{p}{:} \PY{k}{lambda} \PY{n}{n}\PY{p}{:} \PY{l+m+mi}{1} \PY{k}{if} \PY{n}{n}\PY{o}{==}\PY{l+m+mi}{0} \PY{k}{else} \PY{n}{n}\PY{o}{*}\PY{n}{f}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{fact} \PY{o}{=} \PY{n}{R}\PY{p}{(}\PY{n}{fact}\PY{p}{)}
+\PY{n}{fact}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+24
+\end{Verbatim}
+\end{tcolorbox}
+        
+    假设我们有一个函数\texttt{Y(R)}，可以计算出\texttt{R}的不动点，即\texttt{Y(R)\ =\ R(Y(R))}
+
+\begin{verbatim}
+F    = lambda f: lambda n: 1 if n==0 else n*f(f)(n-1)
+F(F) =           lambda n: 1 if n==0 else n*F(F)(n-1)
+fact =           lambda n: 1 if n==0 else n*fact(n-1)
+<==> fact = F(F)
+
+fact = (lambda f: lambda n: 1 if n==0 else n*f(n-1))(fact)
+R    = lambda f: lambda n: 1 if n==0 else n*f(n-1)
+<==> fact = R(fact)
+
+F(x) = lambda f: lambda n: 1 if n==0 else n*f(f)(n-1) (x)
+     =           lambda n: 1 if n==0 else n*x(x)(n-1)
+     = R(x(x))
+<==> F = lambda x: R(x(x))
+
+Y(R) = fact
+     = R(fact)
+     = R(F(F))
+<==> Y(R) = R(F(F))
+\end{verbatim}
+
+通过这些恒等式，我们可以通过\texttt{R(F(F))}来构建\texttt{Y(R)=fact}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{49}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{R} \PY{o}{=} \PY{k}{lambda} \PY{n}{f}\PY{p}{:} \PY{k}{lambda} \PY{n}{n}\PY{p}{:} \PY{l+m+mi}{1} \PY{k}{if} \PY{n}{n}\PY{o}{==}\PY{l+m+mi}{0} \PY{k}{else} \PY{n}{n}\PY{o}{*}\PY{n}{f}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{F} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{R}\PY{p}{(}\PY{n}{x}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+\PY{n}{Y} \PY{o}{=} \PY{k}{lambda} \PY{n}{R}\PY{p}{:} \PY{n}{R}\PY{p}{(}\PY{n}{F}\PY{p}{(}\PY{n}{F}\PY{p}{)}\PY{p}{)}
+
+\PY{k}{try}\PY{p}{:}
+    \PY{n}{fact} \PY{o}{=} \PY{n}{Y}\PY{p}{(}\PY{n}{R}\PY{p}{)}
+\PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{repr}\PY{p}{(}\PY{n}{e}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+RecursionError('maximum recursion depth exceeded')
+    \end{Verbatim}
+
+    依然是因为惰性求值的问题，我们把 \texttt{x(x)} 换成
+\texttt{lambda\ z:\ x(x)(z)}，延后计算 x 的值。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{R} \PY{o}{=} \PY{k}{lambda} \PY{n}{f}\PY{p}{:} \PY{k}{lambda} \PY{n}{n}\PY{p}{:} \PY{l+m+mi}{1} \PY{k}{if} \PY{n}{n}\PY{o}{==}\PY{l+m+mi}{0} \PY{k}{else} \PY{n}{n}\PY{o}{*}\PY{n}{f}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{F} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{R}\PY{p}{(}\PY{k}{lambda} \PY{n}{z}\PY{p}{:} \PY{n}{x}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{(}\PY{n}{z}\PY{p}{)}\PY{p}{)}
+\PY{n}{Y} \PY{o}{=} \PY{k}{lambda} \PY{n}{R}\PY{p}{:} \PY{n}{R}\PY{p}{(}\PY{n}{F}\PY{p}{(}\PY{n}{F}\PY{p}{)}\PY{p}{)}
+\PY{n}{fact} \PY{o}{=} \PY{n}{Y}\PY{p}{(}\PY{n}{R}\PY{p}{)}
+
+\PY{n}{fact}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+24
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{ux4e00ux822cux5f62ux5f0f}{%
+\subsubsection{一般形式}\label{ux4e00ux822cux5f62ux5f0f}}
+
+对于一般的情况，我们怎么计算\(f\)的不动点呢？
+
+首先定义一个 \[
+F(x)=f(x(x))
+\] 于是有 \(F(F)=f(F(F))\)，然后如下定义即可 \[
+Y(f) = F(F)
+\]
+
+证明： \[
+\begin{aligned}
+Y(f) &= F(F) \\
+   &= f(F(F))\\
+   &= f(Y(f))\\
+\end{aligned}
+\] 于是可知 \(Y(f)\) 是 \(f\) 的不动点。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{Y}\PY{p}{(}\PY{n}{f}\PY{p}{)}\PY{p}{:}
+    \PY{n}{F} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{f}\PY{p}{(}\PY{k}{lambda} \PY{n}{z}\PY{p}{:} \PY{n}{x}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{(}\PY{n}{z}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{F}\PY{p}{(}\PY{n}{F}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    我们还可以试着计算一下斐波拉契数列：
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{52}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{Fib}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{n}\PY{o}{==}\PY{l+m+mi}{1} \PY{o+ow}{or} \PY{n}{n}\PY{o}{==}\PY{l+m+mi}{2}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{1}
+    \PY{k}{else}\PY{p}{:}
+        \PY{k}{return} \PY{n}{Fib}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{+}\PY{n}{Fib}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}
+
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{Fib}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+1
+1
+2
+3
+5
+8
+13
+21
+34
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{R} \PY{o}{=} \PY{k}{lambda} \PY{n}{f}\PY{p}{:} \PY{k}{lambda} \PY{n}{n}\PY{p}{:} \PY{l+m+mi}{1} \PY{k}{if} \PY{n}{n}\PY{o}{==}\PY{l+m+mi}{1} \PY{o+ow}{or} \PY{n}{n}\PY{o}{==}\PY{l+m+mi}{2} \PY{k}{else} \PY{n}{f}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{+}\PY{n}{f}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{fib} \PY{o}{=} \PY{n}{Y}\PY{p}{(}\PY{n}{R}\PY{p}{)}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{fib}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+1
+1
+2
+3
+5
+8
+13
+21
+34
+    \end{Verbatim}
+
+    \hypertarget{reference}{%
+\subsection{Reference}\label{reference}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{http://mindhacks.cn/2006/10/15/cantor-godel-turing-an-eternal-golden-diagonal/}{康托尔、哥德尔、图灵------永恒的金色对角线(rev\#2)
+  -- 刘未鹏 \textbar{} Mind Hacks}
+\item
+  \href{http://www.inf.fu-berlin.de/lehre/WS03/alpi/lambda.pdf}{A
+  Tutorial Introduction to the Lambda Calculus}
+\item
+  \href{https://blog.ruo-chen.wang/2021/04/lambda-calculus-from-the-ground-up.html}{从零开始的
+  λ 演算 \textbar{} weirane's blog}
+\item
+  \href{https://www.youtube.com/watch?v=pkCLMl0e_0k\&ab_channel=PyCon2019}{David
+  Beazley - Lambda Calculus from the Ground Up - PyCon 2019 - YouTube}
+\item
+  \href{https://github.com/orsinium-labs/python-lambda-calculus}{GitHub
+  - orsinium-labs/python-lambda-calculus: Lambda Calculus things
+  implemented on Python}
+\end{enumerate}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
