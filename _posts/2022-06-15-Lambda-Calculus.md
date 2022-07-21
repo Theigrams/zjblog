@@ -15,10 +15,9 @@ typora-root-url: ../..
 
 * TOC
 {:toc}
-
 ## 1. 前言
 
-这是一个写给正常人学习的$𝜆$演算教程，如果你搜索「Lambda 演算」，维基百科上的说明长这样：
+这是一个写给正常人学习的$𝜆$演算教程，如果搜索「Lambda 演算」，维基百科上的说明长这样：
 
 ```
 0 = λf.λx.x
@@ -843,18 +842,18 @@ fact(fact,3)
 ```
 
     ---------------------------------------------------------------------------
-
+    
     TypeError                                 Traceback (most recent call last)
-
+    
     /var/folders/1y/8ypw_bc55x5d69n0rnzpwxjr0000gn/T/ipykernel_25288/2401241230.py in <module>
     ----> 1 fact(fact,3)
-    
+
 
     /var/folders/1y/8ypw_bc55x5d69n0rnzpwxjr0000gn/T/ipykernel_25288/901191219.py in fact(f, n)
           3         return 1
           4     else:
     ----> 5         return n*f(n-1)
-    
+
 
     TypeError: fact() missing 1 required positional argument: 'n'
 
