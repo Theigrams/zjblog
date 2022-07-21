@@ -17,9 +17,9 @@ typora-root-url: ../..
 * TOC
 {:toc}
 
-## 问题背景
+## 1. 问题背景
 
-### 2D-2D位姿估计
+### 1.1. 2D-2D位姿估计
 
 该论文主要面向2D到2D的位姿估计问题：
 
@@ -99,7 +99,7 @@ $$
 \boldsymbol{x}_2^{\top} E\boldsymbol{x}_1 = 0
 $$
 
-### Minimal problem
+### 1.2. Minimal problem
 
 对于上面的这个2D-2D的位姿估计问题，我们要估计本质矩阵 $$E=[t]_{\times}R$$，由于平移和旋转各有3个自由度，故 $[t]_{\times}R$ 共有6个自由度，但由于**尺度等价性**，因此 $E$ 实际上只有5个自由度（通常的做法是设 $t$ 的长度为1），也就是说我们最少可以用5对点来求解 $E$ 矩阵，这就是5点法。
 
@@ -115,7 +115,7 @@ $$
 >
 > In the case of problems of computing camera geometry, the number of equations in the system and the corresponding number of its solutions depend on the number of geometric constraints and the number of input data (usually 2D-2D, 2D-3D or 3D-3D point or line correspondences) used to formulate the problem. The problems solved from a minimal number of input data and using all the possible geometric constrains that lead to a finite number of solutions are often called “minimal problems” or “minimal cases”. Most of these minimal problems are named according to the smallest number of correspondences that are required to solve these problems and to obtain a finite number of possible solutions, e.g., the five point relative pose problem or the six point focal length problem.
 
-### Previous work
+### 1.3. Previous work
 
 ![image-20220719183247255](/zjblog/assets/images/2022-07-18-learning-to-solve-hard-minimal-problems/image-20220719183247255-8387797-8397137.png)
 
@@ -131,15 +131,15 @@ $$
 
 当 $t=0$ 时，$H(x,0)=G(x)$，此时算出根 $s_0$，然后给 $t$ 加上一个 $\Delta t$，以 $s_0$ 为初值，使用牛顿法等局部优化算法得到 $H(x,\Delta t)$ 的根 $s(\Delta t)$，以此类推，当 $t$ 从0变化到1时，我们就能得到一条解曲线 $s(t)$，此时 $s(1)$ 即为 $G(x)$ 的解。但全局HC方法需要跟踪多个解曲线以保证能找到真实解，这样的方法需要消耗大量的时间，之前的那个5pt问题，使用Macaulay2中的HC法来求解需要 $10^5\,\mu s$，通常而言，HC方法比符号数值求解器会慢1000到10万倍。
 
-## Propose method
+## 2. Propose method
 
 HC之所以慢，就是因为它要从多个起始点开始追踪，以保证能覆盖所有的解，并且最后也要从大量伪解中选出真实解。但如果我们已经知道了真实解附近的一个起始点，那么只需要跟踪一条路径即可，这样也避免了伪解的干扰。
 
 所以，这篇论文的核心思想就在于通过神经网络来预测一个起始点，但可以想象，直接预测一个真实解附近的起始点是比较有难度的，所以作者就先从数据集生成多个起始点，称为anchor(锚点)，然后用神经网络来推断每个问题对应的anchor，这就类似于将回归问题转化成了分类问题。
 
-## 具体细节
+## 3. 具体细节
 
-### 5pt minimal problem
+### 3.1. 5pt minimal problem
 
 <img src="/zjblog/assets/images/2022-07-18-learning-to-solve-hard-minimal-problems/image-20220721091138291-8387797-8397137.png" alt="image-20220721091138291" style="zoom: 20%;" />
 
@@ -162,7 +162,7 @@ $$
 
 > 对于一般的HC求解器来说，只能求解方阵系统，也就是9个方程9个未知量，因此还需要舍弃一个方程。
 
-### 神经网络
+### 3.2. 神经网络
 
 神经网络的输入是一个 problem-solution pairs $(p,s)$，对于5pt问题，$p$为5个点的10个像素坐标，是一个20维的向量，$s$为9个像素点的深度（第一个深度固定为1），是一个9维的向量。将两个向量拼接起来，就是一个24维的向量，这就是神经网络的输入。
 
@@ -200,7 +200,7 @@ class Net(nn.Module):
         return self.fc3(x)
 ```
 
-### 流形假设
+### 3.3. 流形假设
 
 为什么我们能用神经网络来学习这个问题？因为这个problem-solution pair构成了一个流形，直白一点，就是problem对应的solution在大部分情况下都是连续的。
 
@@ -220,7 +220,7 @@ class Net(nn.Module):
 
 ![image-20220721151604974](/zjblog/assets/images/2022-07-18-learning-to-solve-hard-minimal-problems/image-20220721151604974-8397137.png)
 
-### 同伦连续
+### 3.4. 同伦连续
 
 如果我们要获取问题 $p$ 的解 $s$，可以先从一个已知的 problem/solution pair $(p_0, s_0)$ 出发，构建线段同伦(Linear segment HC)：
 
@@ -248,11 +248,11 @@ $$
 
 整个过程如上图所示，红色的为预测步，绿色为校正步，两者交替进行，最终得到解曲线 $s(t)$。
 
-### 其他
+### 3.5. 其他
 
 还有一些细节，例如 RANSAC框架、anchor集合的生成、训练集的生成，在此就不过多描述了，感兴趣的可以去看原论文。
 
-## 推理流程
+## 4. 推理流程
 
 整个推理流程还是比较明朗的
 
@@ -263,7 +263,7 @@ $$
 3. 构建同伦映射 $p(t)=(1-t)p_0+t(p)$
 4. 从 $(p_0,s_0)$ 跟踪到 $(p,s(1))$ 得到最终解
 
-## 实验结果
+## 5. 实验结果
 
 ![image-20220721163142822](/zjblog/assets/images/2022-07-18-learning-to-solve-hard-minimal-problems/image-20220721163142822.png)
 
@@ -274,7 +274,7 @@ $$
 * 论文中的方法只跟踪一个解，成功率为 26%，但用时只需 $16\, \mu s$
 * 考虑到求解过程都是在 RANSAC 框架下运行，因此可以用平均有效时间来衡量，一个是 $0.64\,s$，另是 $65\,\mu s$，能达到接近 10000倍的加速
 
-## 代码实测
+## 6. 代码实测
 
 我跑了一下作者的代码，挺无语的。首先是 Readme 文档写得乱七八糟，让人摸不着头脑，然后是代码一堆BUG！！！
 
@@ -352,7 +352,7 @@ python3 train_nn.py ./MODEL ./MODEL/trainParam.txt
 
 说实话我现在也没想明白这是怎么回事，真的挺离谱的。
 
-## References
+## 7. References
 
 1. [相对位姿估计的进展和新方法](https://www.shenlanxueyuan.com/open/course/131)
 2. [Minimal problem](https://cmp.felk.cvut.cz/~kukelova/minimal/index.php)
