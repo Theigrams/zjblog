@@ -288,9 +288,7 @@ $$
 
 ![image-20220721172408329](/zjblog/assets/images/2022-07-18-learning-to-solve-hard-minimal-problems/image-20220721172408329.png)
 
-最上面是网络的output，可以看到前几个和最后几个向量是一样的，明明作者也加了shuffle，但这数据明显没有打乱，不知道是哪里的bug。
 
-然后是选对和选错anchor的个数，准确率只有1.7%，总共134个anchor，这准确率仅比瞎猜略好一点。
 
 最后一行的4.189是loss，从一开始就没降下去过，我一度以为自己的训练过程是有问题的。。。
 
@@ -298,7 +296,9 @@ $$
 
 ![image-20220721174659332](/zjblog/assets/images/2022-07-18-learning-to-solve-hard-minimal-problems/image-20220721174659332.png)
 
-在测试集上的准确率居然高达 28.5%，每个 tracking 用时 $14\,\mu s$，居然是对的，太离谱了！！！
+在测试集上的准确率为 28.5%，每个 tracking 用时 $14\,\mu s$，居然和论文的结果对上了。。。
+
+
 
 以下是我的训练脚本，因为 anchor 生成那一步有问题，所以注释掉了。
 
@@ -348,9 +348,15 @@ python3 train_nn.py ./MODEL ./MODEL/trainParam.txt
 ./BIN/evaluate ./$DATA/test_data.txt ./MODEL/ ./MODEL/trainParam.txt
 ```
 
-我用 `courtyard` 和 `playground` 作为训练集，用 `relief` 作为测试集，机器为MBP14。
+这里我用 `courtyard` 和 `playground` 作为训练集，用 `relief` 作为测试集，机器为MBP14。
 
-说实话我现在也没想明白这是怎么回事，真的挺离谱的。
+即使我将网络设置随机权重，准确率仍有19%，所以感觉这个网络其实也没学到多少东西。
+
+
+
+整体看下来，作者的思想还是可以的，但神经网络的设计仍有待提升。
+
+
 
 ## 7. References
 
