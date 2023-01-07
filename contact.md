@@ -24,7 +24,7 @@ typora-root-url: ..
 
 - B.S. in Mathematics, [Beihang University](https://www.buaa.edu.cn/) (2015~2019)
 - M.S. in Mathematics, [Beihang University](https://www.buaa.edu.cn/) (2019~2021)
-- Waiting for ...
+- Ph.D. in Mathematics, [Beihang University](https://www.buaa.edu.cn/) (2021~)
 
 ### Direction of interest
 
