@@ -8,6 +8,7 @@ typora-root-url: ../..
 ---
 
 > 泊松曲面重建(Poisson Surface Reconstruction, PSR) 是Lorensen在2006年提出来的一种三维重建方法，其将点云转换为隐式表达的曲面，然后通过Marching Cubes等方法将隐式曲面转换为网格表示。
+> 本文的PDF版可在[这里](/zjblog/assets/images/2023-01-05-possion-recon/PossionRecon.pdf)下载。
 
 <!--more-->
 
