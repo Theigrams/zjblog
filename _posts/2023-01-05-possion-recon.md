@@ -419,20 +419,23 @@ $$
         & =\int_{\partial M}\left\langle\left(\tilde{F}_p\left(q_0\right), 0,0\right), \vec{N}_{\partial M}(p)\right\rangle \mathrm{d} p .
         \end{aligned}
 $$
- 这里最后一步使用了散度定理
+
+这里最后一步使用了散度定理
 
 $$
 \int_{M} \nabla \cdot \vec{G} \mathrm{d} p=\int_{\partial M} \left\langle \vec{G}, \vec{N}_{\partial M}(p)\right\rangle \mathrm{d} p
 $$
 
 同理，可以计算出关于$y$和$z$坐标分量的导数，得到：
+
 $$
 \begin{aligned}
         \left.\frac{\partial}{\partial y}\right|_{q_0}\left(\chi_M * \tilde{F}\right) & =\int_{\partial M}\left\langle\left(0, \tilde{F}_p\left(q_0\right),0\right), \vec{N}_{\partial M}(p)\right\rangle \mathrm{d} p \\
         \left.\frac{\partial}{\partial z}\right|_{q_0}\left(\chi_M * \tilde{F}\right) & =\int_{\partial M}\left\langle\left(0, 0, \tilde{F}_p\left(q_0\right)\right), \vec{N}_{\partial M}(p)\right\rangle \mathrm{d} p
     \end{aligned}
 $$
- 将上述三个方程组合起来，得到：
+
+将上述三个方程组合起来，得到：
 
 $$
 \nabla \left( \chi_M * \tilde{F} \right) (q_0)=\int_{\partial M} \tilde{F}_p\left(q_0\right) \vec{N}_{\partial M}(p) \mathrm{d} p
