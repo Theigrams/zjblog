@@ -235,7 +235,6 @@ typora-root-url: ../..
         }
     };
 </script>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 ```
 
@@ -302,4 +301,3 @@ jekyll_admin:
 
 1. Start Jekyll as you would normally (`bundle exec jekyll serve`)
 2. Navigate to [http://localhost:4000/admin](http://localhost:4000/admin) to access the administrative interface
-
